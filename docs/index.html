@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Magic Taste Tobacco — в разработке</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Проект по подбору вкусов табака для кальянного микса. В разработке." />
+    <link rel="stylesheet" href="./style.css" />
+    <!-- React 18 -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel для JSX в браузере (удобно для демо на GH Pages) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const FLAVORS = [
+        "Мята",
+        "Виноград",
+        "Арбуз",
+        "Дыня",
+        "Лимон",
+        "Ваниль",
+        "Кола",
+        "Персик",
+      ];
+
+      const HOOKAHS = [
+        "Khalil Mamoon",
+        "Hoob",
+        "Alpha Hookah",
+        "MattPear",
+      ];
+
+      const DRAW_LEVELS = [
+        { value: "light", label: "Лёгкая" },
+        { value: "medium", label: "Средняя" },
+        { value: "heavy", label: "Тяжёлая" },
+      ];
+
+      function App() {
+        const [selectedFlavors, setSelectedFlavors] = React.useState(new Set());
+        const [hookah, setHookah] = React.useState(HOOKAHS[0]);
+        const [draw, setDraw] = React.useState("medium");
+
+        const toggleFlavor = (name) => {
+          setSelectedFlavors((prev) => {
+            const next = new Set(prev);
+            if (next.has(name)) next.delete(name);
+            else next.add(name);
+            return next;
+          });
+        };
+
+        const handleMix = () => {
+          alert("Функция подбора микса в разработке. Следите за обновлениями!");
+        };
+
+        return (
+          <div className="container">
+            <header className="header">
+              <h1>Magic Taste Tobacco</h1>
+              <p className="badge">Проект в разработке</p>
+            </header>
+
+            <section className="panel">
+              <h2>Выбор вкусов</h2>
+              <p className="hint">Можно выбрать несколько вкусов</p>
+              <div className="grid">
+                {FLAVORS.map((name) => (
+                  <label key={name} className={"chip " + (selectedFlavors.has(name) ? "chip--active" : "")}>
+                    <input
+                      type="checkbox"
+                      checked={selectedFlavors.has(name)}
+                      onChange={() => toggleFlavor(name)}
+                    />
+                    <span>{name}</span>
+                  </label>
+                ))}
+              </div>
+            </section>
+
+            <section className="panel">
+              <h2>Кальян и тяга</h2>
+              <div className="row">
+                <label className="field">
+                  <span className="field__label">Кальян</span>
+                  <select value={hookah} onChange={(e) => setHookah(e.target.value)}>
+                    {HOOKAHS.map((h) => (
+                      <option key={h} value={h}>{h}</option>
+                    ))}
+                  </select>
+                </label>
+
+                <fieldset className="field">
+                  <legend className="field__label">Тяга</legend>
+                  <div className="row row--wrap">
+                    {DRAW_LEVELS.map((d) => (
+                      <label key={d.value} className={"radio " + (draw === d.value ? "radio--active" : "")}>
+                        <input
+                          type="radio"
+                          name="draw"
+                          value={d.value}
+                          checked={draw === d.value}
+                          onChange={() => setDraw(d.value)}
+                        />
+                        <span>{d.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+              </div>
+            </section>
+
+            <section className="panel">
+              <h2>Итог</h2>
+              <ul className="summary">
+                <li>Кальян: <strong>{hookah}</strong></li>
+                <li>Тяга: <strong>{DRAW_LEVELS.find(d => d.value === draw)?.label}</strong></li>
+                <li>Вкусы: <strong>{Array.from(selectedFlavors).join(", ") || "не выбрано"}</strong></li>
+              </ul>
+              <button className="primary" onClick={handleMix}>Собрать микс</button>
+            </section>
+
+            <footer className="footer">
+              <small>© 2025 Magic Taste Tobacco • MIT</small>
+            </footer>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
